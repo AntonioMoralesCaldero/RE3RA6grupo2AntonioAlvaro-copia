@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editar Empresa</title>
+
+    <!-- Agregar estilos de Bootstrap desde Webjars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" />
+
+    <!-- Agregar estilos de FontAwesome desde Webjars -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Agregar script de jQuery desde Webjars -->
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Otros estilos o enlaces que puedas necesitar -->
+</head>
+<body>
+<div th:insert="~{/homenav.html}"></div>
+	    <div class="container text-center"> <!-- Contenedor centrado -->
+	        <h1 class="animate__animated animate__fadeIn">Editar Familias</h1>
+	
+	
+	
+		<form th:action="@{/index/familias/editar}" th:object="${familia}" method="post" class="animate__animated animate__fadeIn">
+		    <!-- Campos del formulario -->
+		    <input type="hidden" th:field="*{id}" />
+		    <div class="mb-3">
+			    <label for="nombre">Nombre:</label>
+			    <input type="text" id="nombre" th:field="*{nombre}" required />
+		    </div>
+		    <!-- Otros campos del formulario si es necesario -->
+		
+		    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+		</form>
+	</div>
+	
+</body>
+</html>

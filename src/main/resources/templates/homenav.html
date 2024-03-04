@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:fragment="head">
+	<meta charset="UTF-8">
+	<title>Nav</title>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+	<!-- BARRA DE NAVEGACION -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container">
+			<!-- Bloque izquierdo -->
+			<a class="navbar-brand" th:href="@{/index/}" style="display: flex; align-items: center;">
+				<img src="/imgs/logo.jpeg" alt=""
+					style="width: 60px; height: 60px; margin-right: 15px;">
+				<span>Salesianos Cadiz</span>
+			</a>
+
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<!-- Bloque central -->
+				<ul class="navbar-nav mx-auto">
+					<li class="nav-item" sec:authorize="hasAuthority('ROL_ALUMNO')">
+						<a class="nav-link" th:href="@{/alumno/mostrarServicios}"
+							style="font-size: 18px; font-weight: bold; color: #ff4500; border: 2px solid #ff4500; padding: 10px; margin-right: 10px; border-radius: 5px;">Servicios</a>
+					</li>
+					<li class="nav-item" sec:authorize="hasAuthority('ROL_ADMIN')">
+						<a class="nav-link" th:href="@{/index/list}"
+							style="font-size: 18px; font-weight: bold; color: #ff4500; border: 2px solid #ff4500; padding: 10px; margin-right: 25px; border-radius: 5px;">Alumnos</a>
+					</li>
+					<li class="nav-item" sec:authorize="hasAuthority('ROL_ADMIN')">
+						<a class="nav-link" th:href="@{/index/empresas}"
+							style="font-size: 18px; font-weight: bold; color: #ff4500; border: 2px solid #ff4500; padding: 10px; margin-right: 25px; border-radius: 5px;">Empresas</a>
+					</li>
+					<li class="nav-item" sec:authorize="hasAuthority('ROL_ADMIN')">
+						<a class="nav-link" th:href="@{/index/familias}"
+							style="font-size: 18px; font-weight: bold; color: #ff4500; border: 2px solid #ff4500; padding: 10px;  border-radius: 5px;">Familias
+							Profesionales</a>
+					</li>
+				</ul>
+
+
+
+				<!-- Bloque derecho -->
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item" sec:authorize="!isAuthenticated()">
+						<a class="nav-link text-center" th:href="@{/auth/login}">
+							<div>
+								<i class="fa fa-sign-in"></i>
+								Login
+							</div>
+						</a>
+					</li>
+
+					<li class="nav-item" sec:authorize="!isAuthenticated()">
+						<a class="nav-link text-center" th:href="@{/auth/register}">
+							<div>
+								<i class="fa fa-user-plus"></i>
+								Register
+							</div>
+						</a>
+					</li>
+
+
+
+					<li class="nav-item" sec:authorize="isAuthenticated()">
+						<a class="nav-link" th:text="${user}"></a>
+					</li>
+
+					<li class="nav-item" sec:authorize="isAuthenticated()">
+						<form th:action="@{/logout}" method="post" id="logoutForm" onsubmit="showLogoutMessage();">
+							<a class="nav-link text-center" href="javascript:void(0);"
+								onclick="document.getElementById('logoutForm').submit();">
+								<div>
+									<i class="fa fa-sign-out"></i>
+									Logout
+								</div>
+							</a>
+						</form>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<script>
+		function showLogoutMessage() {
+			alert("Has cerrado sesión con éxito.");
+		}
+	</script>
+
+</body>
+
+</html>

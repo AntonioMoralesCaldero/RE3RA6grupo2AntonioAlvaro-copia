@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <title>Cursos y Profesores</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}">
+</head>
+
+<style>
+    /* Estilo para alinear la imagen y el texto */
+    .contenedor {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Ajustes de estilo para mejorar la presentación */
+    img {
+        max-width: 100%;
+        height: auto;
+        margin-right: 20px; /* Espaciado entre la imagen y el texto */
+        margin-top: 20px; /* Margen superior para la imagen */
+    }
+
+ 
+</style>
+
+<body style="background-color: lightskyblue;">
+
+    <div th:insert="~{/homenav.html}"></div>
+
+    <div class="contenedor">
+        <div class="texto-container">
+            <h1 class="display-4">Salesianos Cadiz a tu disposicion </h1>
+            <p class="lead">
+			Los Salesianos en Cádiz representan una institución educativa comprometida con la formación integral de sus estudiantes. Con una larga tradición en la región, destacan por ofrecer un ambiente educativo basado en los principios de San Juan Bosco, centrado en la educación académica, valores éticos y desarrollo personal. La presencia de los Salesianos en Cádiz se distingue por fomentar la excelencia académica, la solidaridad y el respeto mutuo. A través de programas educativos innovadores y un enfoque centrado en el estudiante, los Salesianos en Cádiz continúan dejando una huella positiva en la comunidad, preparando a las nuevas generaciones para enfrentar los desafíos de la vida con sabiduría y compasión.
+			</p>
+        </div>
+    </div>
+
+
+  
+
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Servicios</title>
+
+    <!-- Agregar los recursos de Bootstrap desde Webjars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.5.0/css/bootstrap.min.css">
+
+    <!-- Agregar los recursos de FontAwesome desde Webjars -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Agregar el script de jQuery desde Webjars -->
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Estilos para animación -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <!-- Otros estilos o enlaces que puedas necesitar -->
+</head>
+
+<body>
+    <div th:insert="~{/homenav.html}"></div>
+    <div class="container text-center"> <!-- Contenedor centrado -->
+        <h1 class="animate__animated animate__fadeIn">Lista de Servicios</h1>
+        
+       
+        
+        
+        <table class="table table-striped animate__animated animate__fadeIn">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Realizado</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Itera sobre la lista de servicios y muestra cada uno en una fila de la tabla -->
+                <tr th:each="servicio : ${servicios}">
+                    <td th:text="${servicio.titulo}"></td>
+                    <td th:text="${servicio.descripcion}"></td>
+                    <td th:text="${servicio.realizado}"></td>
+
+ 
+                    
+                </tr>
+            </tbody>
+        </table>
+
+        
+    </div>
+
+    <!-- Otros scripts que puedas necesitar -->
+</body>
+
+</html>

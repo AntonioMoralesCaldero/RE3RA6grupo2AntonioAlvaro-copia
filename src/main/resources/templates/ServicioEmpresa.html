@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Servicios de la Empresa</title>
+	<script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+
+	<link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+	<style>
+		.estrellas-valoracion {
+			direction: rtl;
+
+			unicode-bidi: bidi-override;
+
+			font-size: 30px;
+			color: #ccc;
+			display: flex;
+			justify-content: center;
+
+		}
+
+		.estrellas-valoracion input {
+			display: none;
+
+		}
+
+		.estrellas-valoracion label {
+			display: inline-block;
+			cursor: pointer;
+		}
+
+		.estrellas-valoracion label:hover,
+		.estrellas-valoracion label:hover~label,
+		.estrellas-valoracion input:checked~label {
+			color: #f5a623;
+
+		}
+
+		.btn-info {
+			color: #fff;
+			background-color: #17a2b8;
+			border-color: #17a2b8;
+		}
+
+		.btn-info:hover {
+			color: #fff;
+			background-color: #138496;
+			border-color: #117a8b;
+		}
+
+		.btn-info .fa-comments {
+			margin-right: 5px;
+		}
+	</style>
+</head>
+
+<body>
+	<div th:insert="~{/homenav.html}"></div>
+	<div class="container text-center">
+		<h1 class="animate__animated animate__fadeIn">Servicios de la Empresa</h1>
+
+		<form th:action="@{/empresa/servicios}" method="get">
+			<label for="filtroFamiliaProfesional">Familia Profesional:</label>
+			<select id="filtroFamiliaProfesional" name="familiaProfesional" onchange="this.form.submit()">
+				<option value="Todas las Familias Profesionales">Todas las Familias Profesionales</option>
+				<th:block th:each="familia : ${familiasProfesionales}">
+					<option th:value="${familia.nombre}" th:text="${familia.nombre}"
+						th:selected="${familia.nombre == familiaProfesional}"></option>
+				</th:block>
+			</select>
+			<label for="filtroEstado">Estado del Servicio:</label>
+			<select id="filtroEstado" name="estado" onchange="this.form.submit()">
+				<option value="Todos" th:selected="${estado == 'Todos'}">Todos</option>
+				<option value="Realizados" th:selected="${estado == 'Realizados'}">Realizados</option>
+				<option value="AsignadosNoRealizados" th:selected="${estado == 'AsignadosNoRealizados'}">Asignados pero
+					no Realizados</option>
+				<option value="NoAsignados" th:selected="${estado == 'NoAsignados'}">No Asignados</option>
+			</select>
+		</form>
+
+		<table class="table table-striped animate__animated animate__fadeIn">
+			<thead>
+				<tr>
+					<th>Título</th>
+					<th>Descripción</th>
+					<th>Familia Profesional</th>
+					<th>Alumno</th>
+					<th>Fecha</th>
+					<th>Asignado</th>
+					<th>Realizado</th>
+					<th>Comentario</th>
+					<th>Valoración</th>
+					<th>Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<tr th:each="servicio : ${servicios}" th:unless="${servicio.borrado}">
+					<td th:text="${servicio.titulo}"></td>
+					<td th:text="${servicio.descripcion}"></td>
+					<td th:text="${servicio.idFamilia.nombre}"></td>
+					<td th:text="${servicio.idAlumno != null ? servicio.idAlumno.nombre : 'No Asignado'}"></td>
+					<td th:text="${servicio.fechaAlta}"></td>
+					<td>
+
+						<span th:if="${servicio.idAlumno != null}" class="text-success">
+							<i class="fa fa-check"></i>
+						</span>
+						<span th:unless="${servicio.idAlumno != null}" class="text-danger">
+							<i class="fa fa-times"></i>
+						</span>
+					</td>
+					<td>
+
+						<span th:if="${servicio.realizado}" class="text-success">
+							<i class="fa fa-check"></i>
+						</span>
+						<span th:unless="${servicio.realizado}" class="text-danger">
+							<i class="fa fa-times"></i>
+						</span>
+					</td>
+					<td>
+
+						<!-- Botón de comentario dentro del bucle de cada servicio -->
+							<!-- Este botón activará el modal -->
+							<button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+								th:data-bs-target="'#comentarioModal' + ${servicio.id}">
+								<i class="fa fa-comments" aria-hidden="true"></i> Comentar
+							</button>
+
+						<!-- Modal de comentario también dentro del bucle de cada servicio -->
+						<div class="modal fade" th:id="'comentarioModal' + ${servicio.id}" tabindex="-1"
+							aria-labelledby="comentarioModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="comentarioModalLabel">Comentario del Servicio</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"
+											aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										<!-- Formulario para enviar comentario -->
+										<form th:action="@{'/empresa/servicios/comentar/' + ${servicio.id}}"
+											method="post">
+											<div class="mb-3">
+												<label for="comentario" class="col-form-label">Comentario:</label>
+												<textarea class="form-control" id="comentario"
+													name="comentario"></textarea>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary"
+													data-bs-dismiss="modal">Cerrar</button>
+												<button type="submit" class="btn btn-primary">Enviar Comentario</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</td>
+					<td>
+							<form th:action="@{'/empresa/servicios/valorar/' + ${servicio.id}}" method="post">
+								<div class="estrellas-valoracion">
+									<input type="radio" th:id="'estrella5-' + ${servicio.id}" th:name="'valoracion'"
+										value="5" th:checked="${servicio.valoracionEmpresa == 5}" />
+									<label th:for="'estrella5-' + ${servicio.id}"><i class="fa fa-star"></i></label>
+									<input type="radio" th:id="'estrella4-' + ${servicio.id}" th:name="'valoracion'"
+										value="4" th:checked="${servicio.valoracionEmpresa == 4}" />
+									<label th:for="'estrella4-' + ${servicio.id}"><i class="fa fa-star"></i></label>
+									<input type="radio" th:id="'estrella3-' + ${servicio.id}" th:name="'valoracion'"
+										value="3" th:checked="${servicio.valoracionEmpresa == 3}" />
+									<label th:for="'estrella3-' + ${servicio.id}"><i class="fa fa-star"></i></label>
+									<input type="radio" th:id="'estrella2-' + ${servicio.id}" th:name="'valoracion'"
+										value="2" th:checked="${servicio.valoracionEmpresa == 2}" />
+									<label th:for="'estrella2-' + ${servicio.id}"><i class="fa fa-star"></i></label>
+									<input type="radio" th:id="'estrella1-' + ${servicio.id}" th:name="'valoracion'"
+										value="1" th:checked="${servicio.valoracionEmpresa == 1}" />
+									<label th:for="'estrella1-' + ${servicio.id}"><i class="fa fa-star"></i></label>
+								</div>
+								<button type="submit" class="btn btn-primary">Enviar Valoración</button>
+							</form>
+
+					</td>
+
+					<td>
+						<div class="d-inline">
+							<a th:href="@{'/empresa/servicios/editar/' + ${servicio.id}}" class="btn btn-link">
+								<i class="fa fa-edit fs-3"></i>
+							</a>
+						</div>
+						<div class="d-inline">
+							<form method="get" th:action="@{'/empresa/servicios/borrar/' + ${servicio.id}}"
+								onsubmit="return confirm('¿Estás seguro de que deseas eliminar este servicio?')">
+								<button type="submit" class="btn btn-link">
+									<i class="fa fa-trash fs-3"></i>
+								</button>
+							</form>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<a th:href="@{'/empresa/servicios/crear'}" class="btn btn-primary">
+			Crear Servicio
+		</a>
+	</div>
+</body>
+
+
+</html>

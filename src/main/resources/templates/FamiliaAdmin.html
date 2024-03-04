@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Familias</title>
+
+    <!-- Agregar estilos de Bootstrap desde Webjars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" />
+
+    <!-- Agregar estilos de FontAwesome desde Webjars -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Agregar script de jQuery desde Webjars -->
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Otros estilos o enlaces que puedas necesitar -->
+</head>
+<body>
+
+      <div th:insert="~{/homenav.html}"></div>
+    <div class="container text-center"> <!-- Contenedor centrado -->
+        <h1 class="animate__animated animate__fadeIn">Lista de Familias</h1>
+
+        <!-- Botón para crear nueva familia -->
+        <a th:href="@{/index/familias/crear}" class="btn btn-primary mb-3">Crear Nueva Familia</a>
+
+        <table class="table table-striped animate__animated animate__fadeIn">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Editar</th>
+                    <th>Borrar</th>
+                    <!-- Agrega más columnas si es necesario -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="familia : ${familias}">
+                    <td>
+			            <input type="hidden" th:value="${familia.id}" id="hiddenId" name="hiddenId" />
+			            <span th:text="${familia.nombre}"></span>
+			        </td>
+                    <td>
+                       <a th:href="@{/index/familias/editar/{id}(id=${familia.id})}" class="btn btn-link edit-button">
+
+                            <i class="fa fa-edit fs-3"></i>
+                        </a>
+                    </td>
+                <!-- ... Código anterior ... -->
+
+<td>
+    <form method="post" th:action="@{'/index/familias/borrar?id=' + ${familia.id}}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta familia?')">
+        <button type="submit" class="btn btn-link delete-button" th:attr="data-familiaid=${familia.id}">
+            <i class="fa fa-trash fs-3"></i>
+        </button>
+    </form>
+</td>
+
+<!-- ... Código posterior ... -->
+
+           
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

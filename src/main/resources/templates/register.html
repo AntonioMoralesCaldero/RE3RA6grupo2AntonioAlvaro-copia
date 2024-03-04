@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro</title>
+    <link href="/css/registerstyle.css" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+
+<body>
+    <div th:insert="~{/homenav.html}"></div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+      
+                <form th:action="@{/auth/register}" method="post" onsubmit="return validateForm()">
+                    <h2 class="form-heading">Registro de alumnos</h2>
+
+                    <div class="form-group">
+                        <!-- Add your registration form fields here -->
+                        <input name="nombre" type="text" class="form-control" placeholder="Username" autofocus="true" />
+                        <input name="apellidos" type="text" class="form-control" placeholder="Apellido" autofocus="true" />
+                        <input name="username" id="email" type="text" class="form-control" placeholder="Email" autofocus="true" />
+                        <input name="password" id="password" type="password" class="form-control" placeholder="Password" required />
+                        <input name="confirmPassword" id="confirmPassword" type="password" class="form-control" placeholder="Confirm Password" required />
+
+                        <label for="familiaProfesional">Profesional Family:</label>
+                        <select name="idFamilia" class="form-control">
+                            <option th:each="familia : ${familiasProfesionales}" th:value="${familia.id}" th:text="${familia.nombre}"></option>
+                        </select>
+
+                        <!-- Elementos para mostrar mensajes de error -->
+                        <p id="emailError" style="color: red;"></p>
+                        <p id="passwordError" style="color: red;"></p>
+
+                        <!-- Add more fields as needed for registration -->
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> <br>
+                        <button class="btn btn-lg btn-primary" type="submit">Register</button>
+						 <p class="mt-3 text-center">
+						                    ¿Ya tienes una cuenta? <a href="/login">Iniciar sesión</a>
+						                </p>
+                    </div>
+                </form>
+               
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para validar el formulario -->
+    <script>
+        function validateForm() {
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            var emailError = document.getElementById("emailError");
+            var passwordError = document.getElementById("passwordError");
+
+            // Validar correo electrónico
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                emailError.innerHTML = "Ingresa un correo electrónico válido.";
+                return false;
+            } else {
+                emailError.innerHTML = ""; // Limpiar el mensaje de error si el correo es válido
+            }
+
+            // Validar contraseñas
+            if (password !== confirmPassword) {
+                passwordError.innerHTML = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo.";
+                return false;
+            } else {
+                passwordError.innerHTML = ""; // Limpiar el mensaje de error si las contraseñas coinciden
+            }
+
+            return true;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Crear Nueva Familia</title>
+
+    <!-- Agregar estilos de Bootstrap desde Webjars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" />
+
+    <!-- Agregar estilos de FontAwesome desde Webjars -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Agregar script de jQuery desde Webjars -->
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Otros estilos o enlaces que puedas necesitar -->
+</head>
+<body>
+
+<div th:insert="~{/homenav.html}"></div>
+    <div class="container text-center"> <!-- Contenedor centrado -->
+        <h1 class="animate__animated animate__fadeIn">Crear Nueva Familia</h1>
+
+        <!-- Formulario para crear nueva familia -->
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/index/familias/crear}" method="post">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre de la Familia:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <!-- Agrega más campos del formulario si es necesario -->
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

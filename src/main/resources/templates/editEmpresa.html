@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editar Empresa</title>
+
+    <!-- Agregar estilos de Bootstrap desde Webjars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" />
+
+    <!-- Agregar estilos de FontAwesome desde Webjars -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Agregar script de jQuery desde Webjars -->
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Otros estilos o enlaces que puedas necesitar -->
+</head>
+<body>
+
+    <div th:insert="~{/homenav.html}"></div>
+    <div class="container text-center">
+        <h1 class="animate__animated animate__fadeIn">Editar Empresas</h1>
+
+        <form th:action="@{/index/editEmpresa}" th:object="${empresa}" method="post" enctype="multipart/form-data" class="animate__animated animate__fadeIn">
+            <input type="hidden" th:field="*{id}" />
+   
+            <input type="hidden" th:field="*{borrado}" />
+
+
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" th:field="*{nombre}" class="form-control" id="nombre" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Direccion</label>
+                <input type="text" th:field="*{direccion}" class="form-control" id="direccion" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Telefono</label>
+                <input type="tel" th:field="*{telefono}" class="form-control" id="telefono" required />
+            </div>
+            
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" th:field="*{email}" class="form-control" id="email" required />
+            </div>
+            
+            <div class="mb-3">
+                <label for="logoImagen" class="form-label">Logo</label>
+                <input type="file"  class="form-control-file" accept="image/**" name="logoImagen" id="logoImagen"  />
+                <input type="hidden" th:field="*{logo}" id="logo" name="logo">
+            </div>
+
+           
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </form>
+    </div>
+	<!-- Agregar script de jQuery desde Webjars -->
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpatch.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+	    // Cuando el usuario selecciona una imagen, actualiza el campo oculto con el nombre de la imagen
+	    $('#logoImagen').change(function() {
+	        var fileName = $(this).val().split('\\').pop();
+	        $('#logo').val(fileName);
+	    });
+</script>
+</body>
+</html>

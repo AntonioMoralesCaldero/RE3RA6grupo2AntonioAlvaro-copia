@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+  <html xml:lang xmlns:th="http://www.thymeleaf.org">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Lista de Servicios</title>
+      <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+
+	<link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+      <style>
+        body {
+            background-image: url('imgs/background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .fa-star, .fa-star-o {
+              color: #ffd700;
+              margin-right: 4px;
+          }
+        
+    </style>
+    </head>
+    <body>
+      <div th:insert="~{/homenav.html}"></div>
+      <div class="container mt-3">
+        <div th:if="${not #strings.isEmpty(success)}" class="alert alert-success">
+            <p th:text="${success}"></p>
+        </div>
+        <div th:if="${not #strings.isEmpty(error)}" class="alert alert-danger">
+            <p th:text="${error}"></p>
+        </div>
+      </div>
+      <div class="container text-center">
+        <h1 class="animate_animated animate_fadeIn" style="font-weight: bolder; color: gray;">Lista de Servicios</h1>
+        <table class="table animate_animated animate_fadeIn" style="opacity: 0.8; background-color: white; border-radius: 15px; overflow: hidden;">
+        <thead style="background-color: #ccc;">
+            <tr>
+              <th style="padding: 10px;">Título</th>
+              <th style="padding: 10px;">Descripción</th>
+              <th style="padding: 10px;">Comentarios</th>
+              <th style="padding: 10px;">Valoración</th>
+              <th style="padding: 10px;">Asignar</th>
+              <th style="padding: 10px;">Realizados</th>
+            </tr>
+          </thead>
+          <tbody style="background-color: rgba(255, 255, 255, 0.8);">
+            <tr th:each="servicio, iterStat : ${servicios}" th:id="'row-' + ${servicio.id}">
+              <td th:text="${servicio.titulo}"></td>
+              <td th:text="${servicio.descripcion}"></td>
+              <td>
+                <!-- Botón para abrir el modal de comentarios -->
+                <a href="#" data-bs-toggle="modal" th:attr="data-bs-target='#comentarioModal'+${iterStat.index}">
+                  <i class="fa fa-comment" aria-hidden="true"></i> Leer Comentario
+                </a>
+                <!-- Modal para comentarios -->
+                <div th:attr="id='comentarioModal'+${iterStat.index}" class="modal fade" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Comentario del Servicio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p th:text="${servicio.comentarioEmpresa}">Comentario del servicio</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span th:each="i : ${#numbers.sequence(1, 5)}">
+                  <i class="fa" th:classappend="${i <= servicio.valoracionEmpresa} ? 'fa-star' : 'fa-star-o'"></i>
+                </span>
+              </td>
+              <td>
+                <th:block th:if="${servicio.asignado == false}">
+                  <form th:action="@{/alumno/asignarServicio}" method="post">
+                    <input type="hidden" th:name="servicioId" th:value="${servicio.id}" />
+                    <button type="submit" class="btn-primary btn btn-sm">Asignar</button>
+                  </form>
+                </th:block>
+                <span th:if="${servicio.asignado == true}" class="text-success">Asignado</span>
+              </td>
+                <td>
+                  <th:block th:if="${servicio.realizado == false}">
+                      <button type="button" class="btn-danger btn btn-sm" 
+                          th:attr="data-bs-toggle='modal', data-bs-target='#informeModal' + ${servicio.id}" 
+                          th:if="${servicio.asignado}">Terminar</button>
+                    <div th:attr="id='informeModal'+${servicio.id}" class="modal fade" tabindex="-1">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Rellenar Informe</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <form th:action="@{/alumno/terminarServicioYGuardarInforme}" method="post">
+                              <input type="hidden" th:name="servicioId" th:value="${servicio.id}" />
+                              <div class="mb-3">
+                                <label for="textoInforme" class="form-label">Texto del Informe</label>
+                                <textarea class="form-control" id="textoInforme" name="informe" maxlength="255"></textarea>
+                              </div>
+                              <div class="mb-3">
+                                <label for="tiempoServicio" class="form-label">Tiempo de Servicio (horas)</label>
+                                <input type="number" class="form-control" id="tiempoServicio" name="tiempoServicio" required min="0" step="1">
+                              </div>
+                              <button type="submit" class="btn btn-primary">Enviar Informe</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </th:block>
+                <span th:if="${servicio.realizado == true}" class="text-success">Realizado</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function () {
+          var dataHolder = document.getElementById("dataHolder");
+          if (dataHolder) { // Verificar si dataHolder no es null
+            var servicioId = dataHolder.getAttribute("data-servicio-id");
+            var asignado = dataHolder.getAttribute("data-asignado");
+            if (servicioId && asignado !== null) {
+              var rowElement = document.getElementById("row-" + servicioId);
+              if (rowElement) {
+                // Suponiendo que deseas cambiar el texto y las clases basado en el valor de asignado
+                // Deberás asegurarte que los selectores sean correctos para tu estructura de HTML
+                var textElement = rowElement.querySelector("[th:text]");
+                if(textElement) textElement.innerText = asignado === "1" ? "Sí" : "No";
+                
+                var classElement = rowElement.querySelector("[th:class]");
+                if(classElement) {
+                  classElement.classList.remove("text-success", "text-danger");
+                  classElement.classList.add(asignado === "1" ? "text-success" : "text-danger");
+                }
+                
+                var buttonElement = rowElement.querySelector("button");
+                if(buttonElement) {
+                  buttonElement.disabled = true;
+                  buttonElement.classList.add("btn-secondary");
+                  buttonElement.classList.remove("btn-primary");
+                }
+              }
+            }
+          } else {
+            // Manejar el caso en que dataHolder es null si es necesario
+            console.log('dataHolder element not found');
+          }
+        });
+        /*]]>*/
+      </script>
+      
+      <script>
+        $(document).ready(function() {
+          setTimeout(function() { $(".alert").fadeOut("slow"); }, 5000);
+        });
+      </script>
+    </body>
+  </html>

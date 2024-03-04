@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Alumnos</title>
+
+    <!-- Agregar estilos de Bootstrap desde Webjars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" />
+
+    <!-- Agregar estilos de FontAwesome desde Webjars -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Agregar script de jQuery desde Webjars -->
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Otros estilos o enlaces que puedas necesitar -->
+</head>
+<body>
+
+<div th:insert="~{/homenav.html}"></div>
+    <div class="container text-center"> <!-- Contenedor centrado -->
+        <h1 class="animate__animated animate__fadeIn">Lista de Alumnos</h1>
+        <table class="table table-striped animate__animated animate__fadeIn">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Email</th>
+                    <th>Familia Profesional</th>
+                    <th>Activate</th>
+                    <th>Editar</th>
+                    <th>Borrar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="alumno : ${alumnos}" th:unless="${alumno.borrado}" th:if="${alumno.role == 'ROL_ALUMNO'}">
+					
+                    <td th:text="${alumno.nombre}"></td>
+                    <td th:text="${alumno.apellidos}"></td>
+                    <td th:text="${alumno.username}"></td>
+                    <td>
+                        <span th:each="familia : ${familiasProfesionales}" th:if="${familia.id == alumno.idFamilia}" th:text="${familia.nombre}">
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-link activate-button" th:attr="data-alumnoid=${alumno.id}">
+                            <i class="fa" th:classappend="${alumno.activado} ? 'fa-toggle-on fs-3' : 'fa-toggle-off fs-3'"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <a th:href="@{'/index/edit/' + ${alumno.id}}" class="btn btn-link edit-button">
+                            <i class="fa fa-edit fs-3"></i>
+                        </a>
+                    </td>
+                 <td>
+				    <form method="post" th:action="@{/index/borrar/{id}(id=${alumno.id})}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este alumno?')">
+				        <button type="submit" class="btn btn-link delete-button" th:attr="data-alumnoid=${alumno.id}">
+				            <i class="fa fa-trash fs-3"></i>
+				        </button>
+				    </form>
+				</td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Script personalizado para cambiar el estado del alumno y recargar la página -->
+    <script>
+        $(document).on("click", ".activate-button", function() {
+            var button = $(this);
+            var icon = button.find("i");
+            var alumnoId = button.data("alumnoid");
+
+            // Realiza una solicitud GET para activar o desactivar al alumno
+            $.get("/index/activate", { alumnoId: alumnoId }, function(data) {
+                // Cambia dinámicamente el icono según el estado actualizado del alumno
+                icon.removeClass("fa-toggle-on fa-toggle-off").addClass(data === "activado" ? "fa-toggle-on" : "fa-toggle-off");
+                location.reload(true);
+            });
+        });
+    </script>
+
+    <!-- Otros scripts que puedas necesitar -->
+</body>
+</html>

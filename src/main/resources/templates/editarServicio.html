@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editar Servicio</title>
+
+    <!-- Agregar estilos de Bootstrap desde Webjars -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" />
+
+    <!-- Agregar estilos de FontAwesome desde Webjars -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Agregar script de jQuery desde Webjars -->
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Otros estilos o enlaces que puedas necesitar -->
+</head>
+<body>
+
+<div th:insert="~{/homenav.html}"></div>
+    <div class="container text-center"> <!-- Contenedor centrado -->
+        <h1 class="animate__animated animate__fadeIn">Editar Servicio</h1>
+
+        <form th:action="@{/empresa/servicios/editar}" th:object="${servicioModel}" method="post" class="animate__animated animate__fadeIn">
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="mb-3">
+                <label for="titulo" class="form-label">Título</label>
+                <input type="text" th:field="*{titulo}" class="form-control" id="titulo" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea th:field="*{descripcion}" class="form-control" id="descripcion" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="idFamilia" class="form-label">Familia Profesional</label>
+                <select th:field="*{idFamilia}" class="form-control">
+                    <option th:each="familia : ${familiasProfesionales}" th:value="${familia.id}" th:text="${familia.nombre}"></option>
+                </select>
+            </div>
+
+            <!-- Agrega más campos según los atributos que desees para tu servicio -->
+
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    </div>
+   
+</body>
+</html>

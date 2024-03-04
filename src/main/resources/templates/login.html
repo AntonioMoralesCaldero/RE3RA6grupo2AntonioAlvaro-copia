@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.css">
+    <link href="/css/loginstyle.css" rel="stylesheet" />
+
+    <title>Salesianos</title>
+</head>
+
+<body>
+    <div th:insert="~{/homenav.html}"></div>
+    <header></header>
+
+    <form th:action="@{/auth/login}" method="post" th:object="${alumno}">
+        <h1 class="display">Iniciar sesión</h1>
+
+        <!-- Agregar el bloque para mostrar el mensaje de error -->
+        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            <p>Usuario no encontrado</p>
+        </div>
+
+        <label for="email" class="sr-only">Correo alumno:</label>
+        <input type="text" class="form-control" placeholder="Correo alumno" id="username" name="username" required>
+
+        <label for="password" class="sr-only">Contraseña:</label>
+        <input type="password" class="form-control" placeholder="Contraseña" id="password" name="password" required>
+
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+
+        <button type="submit">Iniciar sesión</button>
+    </form>
+
+    <p>¿No tienes cuenta? <a href="/auth/register">Regístrate aquí</a></p>
+</body>
+
+</html>

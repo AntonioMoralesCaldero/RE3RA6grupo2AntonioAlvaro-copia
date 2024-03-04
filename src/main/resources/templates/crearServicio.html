@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Crear Nuevo Servicio</title>
+
+	<!-- Agregar los recursos de Bootstrap desde Webjars -->
+	<link rel="stylesheet" href="/webjars/bootstrap/5.5.0/css/bootstrap.min.css">
+</head>
+
+<body>
+	<div th:insert="~{/homenav.html}"></div>
+	<h1>Crear Nuevo Servicio</h1>
+
+	<form th:action="@{/empresa/servicios/crear}" method="POST">
+
+
+
+		<div class="mb-3">
+			<label for="titulo" class="form-label">Título:</label>
+			<input type="text" class="form-control" id="titulo" name="titulo" required>
+		</div>
+		<div class="mb-3">
+			<label for="descripcion" class="form-label">Descripción:</label>
+			<textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
+		</div>
+		<div class="mb-3">
+			<label for="familiaProfesional">Profesional Family:</label>
+		<select name="idFamilia" class="form-control">
+    <option th:each="familia : ${familiasProfesionales}" 
+            th:value="${familia.id}" th:text="${familia.nombre}">
+    </option>
+</select>
+
+
+		</div>
+		<!-- Agrega más campos según los atributos que desees para tu servicio -->
+		<button type="submit" class="btn btn-primary">Crear</button>
+	</form>
+
+	<a class="btn btn-secondary" href="/empresa/servicios">Volver</a>
+
+	<!-- Agregar los recursos de Bootstrap y jQuery desde Webjars -->
+	<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/5.5.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>
